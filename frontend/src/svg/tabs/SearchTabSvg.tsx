@@ -1,27 +1,29 @@
 import React from 'react';
 
-export const SearchTabSvg = ({ color = '#000000' }) => {
+type Props = {fillColor: string; strokeColor: string};
+
+export const SearchTabSvg: React.FC<Props> = ({fillColor, strokeColor}) => {
   return (
     <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
+      xmlns='http://www.w3.org/2000/svg'
+      width={24}
+      height={24}
+      fill='none'
     >
       <path
-        d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z"
-        stroke={color}
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        fill={fillColor}
+        fillOpacity={0.15}
+        stroke={strokeColor}
+        strokeLinejoin='round'
+        strokeWidth={1.5}
+        d='M10.5 19a8.5 8.5 0 1 0 0-17 8.5 8.5 0 0 0 0 17Z'
       />
       <path
-        d="M22 22L20 20"
-        stroke={color}
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        stroke={strokeColor}
+        strokeLinecap='round'
+        strokeLinejoin='round'
+        strokeWidth={1.5}
+        d='M13.328 7.171A3.988 3.988 0 0 0 10.5 6 3.988 3.988 0 0 0 7.67 7.171m8.94 9.44 4.242 4.242'
       />
     </svg>
   );

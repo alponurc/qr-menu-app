@@ -6,20 +6,6 @@ import {svg} from '../svg';
 import {stores} from '../stores';
 import {TabScreens} from '../routes';
 
-// Custom hook to check if component has mounted (client-side only)
-function useHasMounted() {
-  const [hasMounted, setHasMounted] = React.useState(false);
-
-  React.useEffect(() => {
-    setHasMounted(true);
-  }, []);
-
-  return hasMounted;
-}
-
-// Client-side only component
-// Removed unused dynamic import for BottomTabBarComponent
-
 const tabs = [
   {
     id: 1,
@@ -49,12 +35,7 @@ const tabs = [
 ];
 
 export const BottomTabBar: React.FC = () => {
-  const hasMounted = useHasMounted();
   const {screen, setScreen} = stores.useTabStore();
-
-  if (!hasMounted) {
-    return null; // Client side rendering only
-  }
 
   return (
     <section className='container'>
@@ -87,7 +68,16 @@ export const BottomTabBar: React.FC = () => {
               >
                 <tab.icon
                   key={tab.id}
-                  color={screen === tab.name ? 'var(--main-turquoise)' : 'var(--text-color)'}
+                  fillColor={
+                    screen === tab.name
+                      ? 'var(--main-turquoise)'
+                      : 'var(--text-color)'
+                  }
+                  strokeColor={
+                    screen === tab.name
+                      ? 'var(--main-turquoise)'
+                      : 'var(--text-color)'
+                  }
                 />
                 <span
                   style={{

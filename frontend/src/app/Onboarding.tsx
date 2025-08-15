@@ -127,7 +127,7 @@ export const Onboarding: React.FC = () => {
       >
         <components.Button
           label='Get Started'
-          href={Routes.TAB_NAVIGATOR}
+          href={Routes.SIGN_IN}
         />
       </section>
     );

@@ -2,7 +2,7 @@ import {useGetMenu} from './useGetMenu';
 import {useGetDishes} from './useGetDishes';
 import {useGetOrders} from './useGetOrders';
 import {usePageColors} from './usePageColors';
-// import {useGetReviews} from './useGetReviews';
+import {useGetReviews} from './useGetReviews';
 import {useGetCarousel} from './useGetCarousel';
 import {useGetOnboarding} from './useGetOnboarding';
 import {useGetPromocodes} from './useGetPromocodes';
@@ -13,7 +13,7 @@ export const hooks = {
   useGetDishes,
   useGetOrders,
   usePageColors,
-//   useGetReviews,
+  useGetReviews,
   useGetCarousel,
   useGetOnboarding,
   useGetPromocodes,

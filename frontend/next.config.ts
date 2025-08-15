@@ -22,7 +22,7 @@ const withPWA = require('@ducanh2912/next-pwa').default({
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['127.0.0.1', 'localhost', 'george-fx.github.io'],
+    domains: ['127.0.0.1'], // Laravel API'den resim yükleyebilmek için bu eklendi
   },
 };
 
