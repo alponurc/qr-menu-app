@@ -6,6 +6,17 @@ import {svg} from '../svg';
 import {stores} from '../stores';
 import {TabScreens} from '../routes';
 
+// Custom hook to check if component has mounted (client-side only)
+function useHasMounted() {
+  const [hasMounted, setHasMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  return hasMounted;
+}
+
 // Client-side only component
 // Removed unused dynamic import for BottomTabBarComponent
 
