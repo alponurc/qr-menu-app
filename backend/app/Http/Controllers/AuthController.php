@@ -26,25 +26,29 @@ class AuthController extends Controller {
   }
 
   public function login(Request $request) {
-    $email = $request->email;
+    $username = $request->username;
     $password = $request->password;
 
-    if ($email == null || $password == null) {
+    if ($username == null || $password == null) {
       return response()->json(['message' => 'Please fill all fields'], 409);
     }
 
-    if (!AppUser::where('email', $email)->exists()) {
-      return response()->json(['message' => 'Email does not exist'], 409);
+    $user = AppUser::where('user_name', $username)->first();
+
+    if (!$user) {
+      return response()->json(['message' => 'Username does not exist'], 409);
     }
 
-    $user = AppUser::where('email', $email)->first();
-
-    if (!$user || !Hash::check($password, $user->password)) {
-        return response()->json(['message' => 'Invalid credentials'], 409);
+    if (!Hash::check($password, $user->password)) {
+      return response()->json(['message' => 'Invalid password'], 409);
     }
+
+    $token = $user->createToken('auth_token')->plainTextToken;
 
     return response()->json([
-      'message' => 'User signed in successfully', 'user' => $user,
+      'message' => 'User signed in successfully',
+      'user' => $user,
+      'token' => $token
     ], 200);
   }
 

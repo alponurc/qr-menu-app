@@ -16,6 +16,10 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\Api\ProductController as ApiProductController;
 use App\Http\Controllers\OnboardingController;
 
+// Public routes
+Route::post('/auth/login', [AuthController::class, 'login']);
+
+// Protected routes
 Route::middleware('authApi')->group(function () {
     // GET Routes
     Route::get('/tags', [TagController::class, 'index']);
@@ -30,13 +34,6 @@ Route::middleware('authApi')->group(function () {
     Route::get('/settings/show-most-favorited-dish', [SettingsController::class, 'showMostFavoritedDishSetting']);
    // Route::get('/products', [ApiProductController::class, 'index']);
     Route::get('/onboarding', [OnboardingController::class, 'index']);
-
-
-
-
-
-    // POST Routes
-    Route::post('/auth/login', [AuthController::class, 'login']);
     Route::post('/order/create', [OrderController::class, 'create']);
     Route::post('/auth/user/update', [AuthController::class, 'updateUser']);
     Route::post('/auth/user/create', [AuthController::class, 'createNewUser']);
