@@ -1,6 +1,10 @@
 const PROJECT_NAME = 'dinehub';
 
-const LOCAL_API = 'http://127.0.0.1:8000/api';
+// Use environment variable with fallback
+const LOCAL_API = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1:8001/api';
+
+// Fallback API for development/testing
+const FALLBACK_API = 'https://george-fx.github.io/APIs/dinehub';
 
 export const URLS = {
   MAIN_URL: LOCAL_API,

@@ -36,15 +36,17 @@ export const RecommendedItem: React.FC<Props> = ({item}) => {
         position: 'relative',
       }}
     >
-      <Image
-        src={item.image}
-        alt='Dish'
-        width={0}
-        height={0}
-        sizes='100vw'
-        priority={true}
-        style={{width: '100%', height: 'auto', borderRadius: '10px'}}
-      />
+      {item.image && (
+        <Image
+          src={item.image}
+          alt={`Menu item image for ${item.name}`}
+          width={0}
+          height={0}
+          sizes='100vw'
+          priority={true}
+          style={{width: '100%', height: 'auto', borderRadius: '10px'}}
+        />
+      )}
       <button
         style={{
           position: 'absolute',

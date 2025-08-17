@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import {Swiper, SwiperSlide} from 'swiper/react';
 import PuffLoader from 'react-spinners/PuffLoader';
 
@@ -12,7 +12,13 @@ import {Routes} from '../../../routes';
 import {components} from '../../../components';
 
 export const Home: React.FC = () => {
+  const [isClient, setIsClient] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
+
+  // Avoid hydration mismatch by rendering dynamic content only on client
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const {menu, menuLoading} = hooks.useGetMenu();
   const {dishes, dishesLoading} = hooks.useGetDishes();
@@ -37,6 +43,11 @@ export const Home: React.FC = () => {
   };
 
   const renderCategories = () => {
+    if (!menu || menu.length === 0) {
+      console.log('Menu data is empty or undefined');
+      return null;
+    }
+
     return (
       <section style={{marginBottom: 30}}>
         <components.BlockHeading
@@ -51,47 +62,52 @@ export const Home: React.FC = () => {
           onSwiper={(swiper) => {}}
           style={{padding: '0 20px'}}
         >
-          {menu.map((item) => {
-            return (
-              <SwiperSlide key={item.id}>
-                <Link
-                  href={`${Routes.MENU_LIST}/all`}
-                  className='clickable'
-                  style={{position: 'relative'}}
-                >
+          {menu.map((item) => (
+            <SwiperSlide key={item.id}>
+              <Link
+                href={`${Routes.MENU_LIST}/all`}
+                className='clickable'
+                style={{position: 'relative'}}
+              >
+                {item.image && (
                   <Image
                     src={item.image}
-                    alt={item.name}
+                    alt={`Category image for ${item.name}`}
                     width={90}
                     height={90}
                     sizes='100vw'
                     priority={true}
                     style={{width: '100%', height: '100%', borderRadius: 10}}
                   />
-                  <span
-                    style={{
-                      position: 'absolute',
-                      bottom: 10,
-                      left: 15,
-                      textAlign: 'center',
-                      backgroundColor: 'var(--white-color)',
-                      borderRadius: '0 0 10px 10px',
-                      color: 'var(--main-dark)',
-                    }}
-                    className='t10 number-of-lines-1'
-                  >
-                    {item.name}
-                  </span>
-                </Link>
-              </SwiperSlide>
-            );
-          })}
+                )}
+                <span
+                  style={{
+                    position: 'absolute',
+                    bottom: 10,
+                    left: 15,
+                    textAlign: 'center',
+                    backgroundColor: 'var(--white-color)',
+                    borderRadius: '0 0 10px 10px',
+                    color: 'var(--main-dark)',
+                  }}
+                  className='t10 number-of-lines-1'
+                >
+                  {item.name}
+                </span>
+              </Link>
+            </SwiperSlide>
+          ))}
         </Swiper>
       </section>
     );
   };
 
   const renderCarousel = () => {
+    if (!carousel || carousel.length === 0) {
+      console.log('Carousel data is empty or undefined');
+      return null;
+    }
+
     return (
       <section style={{marginBottom: 30, position: 'relative'}}>
         <Swiper
@@ -102,12 +118,16 @@ export const Home: React.FC = () => {
           onSlideChange={handleSlideChange}
         >
           {carousel.map((banner, index) => {
+            if (!dishes[index]) {
+              console.log(`No dish found for index ${index}`);
+              return null;
+            }
             return (
               <SwiperSlide key={banner.id}>
                 <Link href={`${Routes.MENU_ITEM}/${dishes[index].id}`}>
                   <Image
-                    src={banner.banner}
-                    alt='Banner'
+                    src={banner.banner || '/placeholder.jpg'}
+                    alt={dishes[index]?.name ? `Featured dish banner for ${dishes[index].name}` : 'Featured dish banner'}
                     width={0}
                     height={0}
                     sizes='100vw'
@@ -154,6 +174,18 @@ export const Home: React.FC = () => {
   };
 
   const renderRecommendedDishes = () => {
+    if (!dishes || dishes.length === 0) {
+      console.log('Dishes data is empty or undefined');
+      return null;
+    }
+
+    const recommendedDishes = dishes.filter((dish) => dish.isRecommended);
+    
+    if (recommendedDishes.length === 0) {
+      console.log('No recommended dishes found');
+      return null;
+    }
+
     return (
       <section style={{marginBottom: 30}}>
         <components.BlockHeading
@@ -168,15 +200,11 @@ export const Home: React.FC = () => {
           onSwiper={(swiper) => {}}
           style={{padding: '0 20px'}}
         >
-          {dishes
-            .filter((dish) => dish.isRecommended)
-            .map((dish) => {
-              return (
-                <SwiperSlide key={dish.id}>
-                  <items.RecommendedItem item={dish} />
-                </SwiperSlide>
-              );
-            })}
+          {recommendedDishes.map((dish) => (
+            <SwiperSlide key={dish.id}>
+              <items.RecommendedItem item={dish} />
+            </SwiperSlide>
+          ))}
         </Swiper>
       </section>
     );
@@ -217,10 +245,14 @@ export const Home: React.FC = () => {
         className='scrollable'
         style={{paddingTop: 10, height: '100%'}}
       >
-        {renderCarousel()}
-        {renderCategories()}
-        {renderRecommendedDishes()}
-        {renderReviews()}
+        {isClient && (
+          <>
+            {renderCarousel()}
+            {renderCategories()}
+            {renderRecommendedDishes()}
+            {renderReviews()}
+          </>
+        )}
       </main>
     );
   };
